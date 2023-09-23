@@ -29,7 +29,7 @@ allprojects {
 2./app/build.grade
 ```
 dependencies {
-	implementation 'com.github.RelinRan:IO:2023.9.23.1'
+	implementation 'com.github.RelinRan:IO:2023.9.23.3'
 }
 ```
 #### 初始化

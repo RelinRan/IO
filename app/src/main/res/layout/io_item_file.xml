@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:adjustViewBounds="true"
-            android:src="@mipmap/io_core_video_tag" />
+            android:src="@mipmap/io_video_tag" />
 
         <TextView
             android:id="@+id/tv_duration"
@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
-            android:src="@mipmap/io_core_item_check" />
+            android:src="@mipmap/io_item_check" />
 
     </LinearLayout>
 

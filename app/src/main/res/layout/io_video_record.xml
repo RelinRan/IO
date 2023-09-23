@@ -21,7 +21,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="5dp"
-            android:src="@mipmap/io_core_flash_on" />
+            android:src="@mipmap/io_flash_on" />
 
         <Space
             android:layout_width="0dp"
@@ -49,7 +49,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="5dp"
-            android:src="@mipmap/io_core_camera" />
+            android:src="@mipmap/io_camera" />
 
     </LinearLayout>
 
@@ -69,7 +69,7 @@
             android:layout_height="35dp"
             android:layout_marginLeft="20dp"
             android:padding="5dp"
-            android:src="@mipmap/io_core_record_down" />
+            android:src="@mipmap/io_record_down" />
 
         <Space
             android:layout_width="0dp"
@@ -80,7 +80,7 @@
             android:id="@+id/iv_cancel"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@mipmap/io_core_record_cancel" />
+            android:src="@mipmap/io_record_cancel" />
 
         <Space
             android:layout_width="0dp"
@@ -90,7 +90,7 @@
         <ImageView
             android:id="@+id/iv_start"
             android:layout_width="60dp"
-            android:src="@mipmap/io_core_record_start"
+            android:src="@mipmap/io_record_start"
             android:layout_height="60dp" />
 
         <Space
@@ -102,7 +102,7 @@
             android:id="@+id/iv_confirm"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@mipmap/io_core_record_ok" />
+            android:src="@mipmap/io_record_ok" />
 
         <Space
             android:layout_width="0dp"
