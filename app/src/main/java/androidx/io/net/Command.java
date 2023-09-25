@@ -296,7 +296,11 @@ public class Command implements Runnable {
                 progress += length;
                 messenger.send(totalSize, progress + downloadedLength);
             }
-            messenger.send(file);
+            if (isCancel()||isPause()){
+                Log.i(TAG, "cancel:"+isCancel()+",pause:"+isPause());
+            }else{
+                messenger.send(file);
+            }
             Log.i(TAG, "write end file.");
         } catch (Exception e) {
             e.printStackTrace();
