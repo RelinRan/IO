@@ -409,9 +409,9 @@ reader.async(new OnReadListener() {
     }
 });
 ```
-Text
+TextFile
 ```
-Text text = new Text();
+TextFile text = new TextFile("Your Project Name","Text Dir","log");
 //写入内容
 text.write("text content");
 //读取内容
@@ -421,18 +421,19 @@ String content = text.read();
 异常捕捉
 ```
 //注意：使用这个类需要提前申请文件写入、读取权限，在Android 6.0需要动态申请权限
-CrashText text = CrashText.initialize(context);//初始化
-text.setFolder("YourProjectName","Crash");//文件夹
-text.setSuffix("crash");//文件前缀
-text.setTimeUnit(TimeUnit.HOURS);//时间单位
-text.setInitialDelay(0);//定时任务第一次延迟时间
-text.setExp(7*24);//文件过期时间
-text.setPeriod(4);//检查频率
+CrashLog log = CrashLog.initialize(context);//初始化
+log.setBugly("Bugly APP ID");//腾讯Bugly APP ID
+log.setFolder("YourProjectName","Crash");//文件夹
+log.setSuffix("crash");//文件前缀
+log.setTimeUnit(TimeUnit.HOURS);//时间单位
+log.setInitialDelay(0);//定时任务第一次延迟时间
+log.setExp(7*24);//文件过期时间
+log.setPeriod(4);//检查频率
 
-text.startScheduled();//开启定时任务
+log.startScheduled();//开启定时任务
 
 //#destory
-text.cancel();//取消所有任务操作
+log.cancel();//取消所有任务操作
 ```
 #### Apk
 获取应用名称

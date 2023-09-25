@@ -5,24 +5,25 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Environment;
 
-import androidx.io.core.UriProvider;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 异常记录文件
  */
-public class CrashText extends Text implements Thread.UncaughtExceptionHandler {
+public class CrashLog extends TextFile implements Thread.UncaughtExceptionHandler {
 
-    public final String TAG = CrashText.class.getSimpleName();
+    public final String TAG = CrashLog.class.getSimpleName();
     private Context context;
+    private String appId;
     /**
      * 异常日志
      */
-    private static volatile CrashText logging;
+    private static volatile CrashLog crash;
     /**
      * 时间格式
      */
@@ -34,15 +35,34 @@ public class CrashText extends Text implements Thread.UncaughtExceptionHandler {
      * @param context 上下文
      * @return
      */
-    public static CrashText initialize(Context context) {
-        if (logging == null) {
-            synchronized (CrashText.class) {
-                if (logging == null) {
-                    logging = new CrashText(context);
+    public static CrashLog initialize(Context context) {
+        if (crash == null) {
+            synchronized (CrashLog.class) {
+                if (crash == null) {
+                    crash = new CrashLog(context);
                 }
             }
         }
-        return logging;
+        return crash;
+    }
+
+    /**
+     * 初始化异常日志
+     *
+     * @param context 上下文
+     * @param project 项目名称
+     * @param dir     文件夹
+     * @return
+     */
+    public static CrashLog initialize(Context context, String project, String dir) {
+        if (crash == null) {
+            synchronized (CrashLog.class) {
+                if (crash == null) {
+                    crash = new CrashLog(context, project, dir, "exp");
+                }
+            }
+        }
+        return crash;
     }
 
     /**
@@ -54,19 +74,24 @@ public class CrashText extends Text implements Thread.UncaughtExceptionHandler {
      * @param prefix  文件前缀名称
      * @return
      */
-    public static CrashText initialize(Context context, String project, String dir, String prefix) {
-        if (logging == null) {
-            synchronized (CrashText.class) {
-                if (logging == null) {
-                    logging = new CrashText(context, project, dir, prefix);
+    public static CrashLog initialize(Context context, String project, String dir, String prefix) {
+        if (crash == null) {
+            synchronized (CrashLog.class) {
+                if (crash == null) {
+                    crash = new CrashLog(context, project, dir, prefix);
                 }
             }
         }
-        return logging;
+        return crash;
     }
 
-    public static CrashText text() {
-        return logging;
+    /**
+     * 异常日志对象
+     *
+     * @return
+     */
+    public static CrashLog object() {
+        return crash;
     }
 
     /**
@@ -74,10 +99,8 @@ public class CrashText extends Text implements Thread.UncaughtExceptionHandler {
      *
      * @param context
      */
-    private CrashText(Context context) {
-        this.context = context;
-        setFolder("IO", "Exception ");
-        Thread.setDefaultUncaughtExceptionHandler(this);
+    private CrashLog(Context context) {
+        this(context, "IO", "Exception", "exp");
     }
 
     /**
@@ -89,13 +112,31 @@ public class CrashText extends Text implements Thread.UncaughtExceptionHandler {
      * @param prefix  文件前缀名称
      * @return
      */
-    private CrashText(Context context, String project, String dir, String prefix) {
+    private CrashLog(Context context, String project, String dir, String prefix) {
         super(project, dir, prefix);
         this.context = context;
+        Thread.setDefaultUncaughtExceptionHandler(this);
     }
 
+    /**
+     * 获取上下文
+     *
+     * @return
+     */
     public Context getContext() {
         return context;
+    }
+
+    /**
+     * 腾讯bugly
+     *
+     * @param appId 应用ID
+     * @return
+     */
+    public CrashLog setBugly(String appId) {
+        this.appId = appId;
+        CrashReport.initCrashReport(context, appId, false);
+        return this;
     }
 
     /**
@@ -106,9 +147,12 @@ public class CrashText extends Text implements Thread.UncaughtExceptionHandler {
      */
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
+        if (appId != null) {
+            CrashReport.postCatchedException(throwable, thread);
+        }
         throwable.printStackTrace();
         String content = buildApplicationDevice(false) + buildRuntimeException(false, throwable);
-        if (UriProvider.isMounted()) {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             write(content, true);
         } else {
             new RuntimeException("sdcard is not mounted").printStackTrace();
@@ -187,6 +231,14 @@ public class CrashText extends Text implements Thread.UncaughtExceptionHandler {
         }
         sb.append("└────────────────────────────────────────────────────────").append("\n");
         return sb.toString();
+    }
+
+    @Override
+    public void cancel() {
+        super.cancel();
+        if (appId != null) {
+            CrashReport.closeBugly();
+        }
     }
 
 }

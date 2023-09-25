@@ -8,9 +8,9 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 文本
+ * 文本文件
  */
-public class Text {
+public class TextFile {
 
     /**
      * 根路径
@@ -68,7 +68,7 @@ public class Text {
     /**
      * 日志文件
      */
-    public Text() {
+    public TextFile() {
         initialize("IoT", "Log", "log");
     }
 
@@ -79,7 +79,7 @@ public class Text {
      * @param dir     文件夹
      * @param prefix  文件前缀
      */
-    public Text(String project, String dir, String prefix) {
+    public TextFile(String project, String dir, String prefix) {
         initialize(project,dir,prefix);
     }
 
